@@ -10,20 +10,15 @@ defmodule GameOfLifeWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
+  pipeline :public do
+    plug :put_layout, html: {GameOfLifeWeb.Layouts, :app}
   end
 
   scope "/", GameOfLifeWeb do
-    pipe_through :browser
+    pipe_through [:browser, :public]
 
-    get "/", PageController, :home
+    live "/", HomeLive
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", GameOfLifeWeb do
-  #   pipe_through :api
-  # end
 
   # Enable LiveDashboard in development
   if Application.compile_env(:game_of_life, :dev_routes) do
